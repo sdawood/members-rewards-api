@@ -9,7 +9,12 @@ const RewardSchema = new mongoose.Schema ({
   minQty: Number,
   minOrderValue: String,
   surcountType: String,
-  surcountAmount: String
+  surcountAmount: String,
+  _member: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    select: false
+  }
 }, {
   timestamps: true, //automatic createdAt, updatedAt
   versionKey: false

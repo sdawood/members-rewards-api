@@ -1,9 +1,10 @@
 import {Router} from 'express'
-const rewardsRouter = Router()
-import {find, findOne, create, update, destroy, populate, add, remove, loadReward} from './actions'
+const rewardsRouter = Router({mergeParams: true})
+import {find, findOne, createMany, update, replaceMany, destroy, loadReward} from './actions'
 
-rewardsRouter.post('/', create)
+rewardsRouter.post('/', createMany)
 rewardsRouter.get('/', find)
+rewardsRouter.put('/', replaceMany)
 rewardsRouter.param('rewardid', loadReward)
 rewardsRouter.get('/:rewardid', findOne)
 rewardsRouter.delete('/:rewardid', destroy)

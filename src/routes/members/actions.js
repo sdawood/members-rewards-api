@@ -31,7 +31,7 @@ export const create = (req, res) => {
     })
 }
 export const update = (req, res) => {
-  Member.findOneAndUpdate({ _id: req.member.id }
+  Member.findOneAndUpdate({ _id: req.member._id }
     , { $set: req.body }
     , { new: true }
     )
@@ -46,7 +46,7 @@ export const update = (req, res) => {
     })
 }
 export const destroy = (req, res) => {
-  Member.findOneAndRemove({ _id: req.member.id })
+  Member.findOneAndRemove({ _id: req.member._id })
     .then(member => {
       res.send(member)
     }, err => {
