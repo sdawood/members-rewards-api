@@ -96,27 +96,47 @@ describe('PUT /members/:memberid', () => {
       })
       .end(done)
   })
-
-  // it('should NOT update member createdAt field', (done) => {
-  //   const memberid = MEMBERS[1]._id.toHexString()
-  //   Member.findById(memberid)
-  //     .then(member => {
-  //       const name = 'put_members_memberid_name'
-  //       const email = 'put_members_memberid_email'
-  //       const createdAt = new Date()
-  //       const _createdAt = member.toJSON().createdAt
-  //       request(app)
-  //         .put(`/members/${memberid}`)
-  //         .send({name, email, createdAt})
-  //         .expect(200)
-  //         .expect(res => {
-  //           expect(res.body.name).to.equal(name)
-  //           expect(res.body.email).to.equal(email)
-  //           expect(Date.parse(res.body.createdAt)).not.to.equal(Date.parse(createdAt))
-  //         })
-  //         .end(done)
-  //     })
-  //
-  // })
 })
 
+describe('GET /members/:memberid/rewards', () => {
+  it('should get rewards for member by id', (done) => {
+    const memberid = MEMBERS[1]._id.toHexString()
+    request(app)
+      .get(`/members/${memberid}/rewards`)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.length).to.equal(2)
+        expect(res.body.map(r => r.id)).to.eql(REWARDS.filter(r => r._member.toHexString() === memberid).map(r => r._id.toHexString()))
+      })
+      .end(done)
+  })
+})
+
+
+describe('PUT /members/:memberid/rewards', () => {
+  it('should `REPLACE` rewards for member with the passed list of new rewards', (done) => {
+    const memberid = MEMBERS[1]._id.toHexString()
+    const newRewards = [
+      {name: 'put_member_memberid_rewards_1'},
+      {name: 'put_member_memberid_rewards_1'},
+      ]
+
+    request(app)
+      .put(`/members/${memberid}/rewards`)
+      .send(newRewards)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.length).to.equal(2)
+        expect(res.body.map(r => r.name)).to.eql(newRewards.map(r => r.name))
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        Reward.find({_member: memberid})
+          .then(docs => {
+            expect(docs.length).to.eql(2)
+            expect(docs.map(r => r.name)).to.eql(newRewards.map(r => r.name))
+            done()
+          }).catch(done)
+      })
+  })
+})
