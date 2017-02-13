@@ -1,12 +1,10 @@
 {
   "test": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/RewardsAppTest",
-    "JWT_SECRET": "abc123"
+    "MONGODB_URI": "mongodb://localhost:27017/RewardsAppTest"
   },
   "development": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/RewardsApp",
-    "JWT_SECRET": "abc123"
+    "MONGODB_URI": "mongodb://localhost:27017/RewardsApp"
   }
 }
