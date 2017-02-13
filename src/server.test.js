@@ -6,7 +6,7 @@ import {app} from './server'
 import {Member} from './models/member'
 import {Reward} from './models/reward'
 
-import {MEMBERS, seedMembers, REWARDS, seedRewards} from './test/seed'
+import {MEMBERS, seedMembers, REWARDS, seedRewards} from './db/seed'
 
 beforeEach(seedMembers)
 beforeEach(seedRewards)
