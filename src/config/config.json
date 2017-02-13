@@ -1,7 +1,7 @@
 {
   "test": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/RewardsApp",
+    "MONGODB_URI": "mongodb://localhost:27017/RewardsAppTest",
     "JWT_SECRET": "abc123"
   },
   "development": {
