@@ -112,13 +112,82 @@ describe('GET /members/:memberid/rewards', () => {
   })
 })
 
+describe('GET /members/:memberid/rewards/:rewardid', () => {
+  it('should get reward by id for member by id', (done) => {
+    const memberid = MEMBERS[0]._id.toHexString()
+    const rewardid = REWARDS[0]._id.toHexString()
+    request(app)
+      .get(`/members/${memberid}/rewards/${rewardid}`)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.name).to.equal(REWARDS[0].name)
+      })
+      .end(done)
+  })
+})
+
+describe('POST /members/:memberid/rewards', () => {
+  it('should create rewards for member with the passed list of new rewards', (done) => {
+    const memberid = MEMBERS[0]._id.toHexString()
+    const newRewards = [
+      {name: 'post_member_memberid_rewards_1'},
+      {name: 'post_member_memberid_rewards_2'},
+    ]
+
+    request(app)
+      .post(`/members/${memberid}/rewards`)
+      .send(newRewards)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.length).to.equal(2)
+        expect(res.body.map(r => r.name)).to.eql(newRewards.map(r => r.name))
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        Reward.find({
+          _member: memberid,
+          name: { $in: newRewards.map(r => r.name)}
+        })
+          .then(docs => {
+            expect(docs.length).to.eql(2)
+            expect(docs.map(r => r.name)).to.eql(newRewards.map(r => r.name))
+            done()
+          }).catch(done)
+      })
+  })
+})
+
+describe('PUT /members/:memberid/rewards/:rewardid', () => {
+  it('should update reward by id for member by id', (done) => {
+    const memberid = MEMBERS[0]._id.toHexString()
+    const rewardid = REWARDS[0]._id.toHexString()
+    const updatedReward = {name: `put_member_${memberid}_rewards_${rewardid}`}
+
+    request(app)
+      .put(`/members/${memberid}/rewards/${rewardid}`)
+      .send(updatedReward)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.name).to.equal(updatedReward.name)
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        Reward.findOne({_id: rewardid, _member: memberid})
+          .then(reward => {
+            console.log('==>', reward)
+            expect(reward.name).to.eql(updatedReward.name)
+            done()
+          }).catch(done)
+      })
+  })
+})
 
 describe('PUT /members/:memberid/rewards', () => {
   it('should `REPLACE` rewards for member with the passed list of new rewards', (done) => {
     const memberid = MEMBERS[1]._id.toHexString()
     const newRewards = [
       {name: 'put_member_memberid_rewards_1'},
-      {name: 'put_member_memberid_rewards_1'},
+      {name: 'put_member_memberid_rewards_2'},
       ]
 
     request(app)
@@ -136,6 +205,27 @@ describe('PUT /members/:memberid/rewards', () => {
             expect(docs.length).to.eql(2)
             expect(docs.map(r => r.name)).to.eql(newRewards.map(r => r.name))
             done()
+          }).catch(done)
+      })
+  })
+})
+
+describe('DELETE /members/:memberid/rewards/:rewardid', () => {
+  it('should delete reward by id for member by id', (done) => {
+    const memberid = MEMBERS[0]._id.toHexString()
+    const rewardid = REWARDS[0]._id.toHexString()
+
+    request(app)
+      .delete(`/members/${memberid}/rewards/${rewardid}`)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.name).to.equal(REWARDS[0].name)
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        Reward.findOne({_id: rewardid, _member: memberid})
+          .then(reward => {
+            done(reward)
           }).catch(done)
       })
   })

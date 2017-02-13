@@ -20,13 +20,11 @@ export const findOne = (req, res) => {
 }
 
 export const createMany = (req, res) => {
-  console.log('=> createMany')
   let rewards = req.body
   rewards = rewards.map(reward => {
     reward._member = req.member._id
     return reward
   })
-  console.log(JSON.stringify(rewards, null, 2))
   Reward.insertMany(rewards)
     .then(result => {
       res.send(result)
