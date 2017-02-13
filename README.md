@@ -65,6 +65,9 @@ Functions    : 97.18% ( 69/71 )
 Lines        : 98.12% ( 209/213 )
 ================================================================================
 ```
+## Why is the Travis build failing
+WIP: current free Travis environment doesn't have a Mongodb service configured, configuring that service should pass the db tests and fix the build
+
 ## Discusson and future roadmap
 #### Why not Sails.js (in this particular exercise)?
 * To showcase some es6 project setup and coding style
