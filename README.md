@@ -66,6 +66,43 @@ Lines        : 98.12% ( 209/213 )
 ================================================================================
 ```
 
+## Available endpoints and where to find Routes in the code
+
+The member routes are mounted on the *root* of the URL, it might have been as well included a prefix, e.g. /api/ or /api/v3/
+
+```javascript
+
+// members-rewards-api/src/routes/members/index.js
+
+membersRouter.post('/', create)
+membersRouter.get('/', find)
+membersRouter.param('memberid', loadMember)
+membersRouter.get('/:memberid', findOne)
+membersRouter.delete('/:memberid', destroy)
+membersRouter.put('/:memberid', update)
+membersRouter.use('/:memberid/rewards', rewardsRouter)
+```
+
+The rewards routes are nested under the members routes as configured in the last line of the previous code snippet
+```javascript
+membersRouter.use('/:memberid/rewards', rewardsRouter)
+```
+
+The rewards routes are configured as follows
+
+```javascript
+
+//members-rewards-api/src/routes/members/rewards/index.js
+rewardsRouter.post('/', createMany)
+rewardsRouter.get('/', find)
+rewardsRouter.put('/', replaceMany)
+rewardsRouter.param('rewardid', loadReward)
+rewardsRouter.get('/:rewardid', findOne)
+rewardsRouter.delete('/:rewardid', destroy)
+rewardsRouter.put('/:rewardid', update)
+```
+
+Using such structure makes it easy to locate the code responsible for handling a specific route. Also defining actions in bite size format as shown above facilitates testing and promotes code reuse
 ## Discusson and future roadmap
 #### Why not Sails.js (in this particular exercise)?
 * To showcase some es6 project setup and coding style
