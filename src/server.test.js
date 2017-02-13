@@ -97,26 +97,26 @@ describe('PUT /members/:memberid', () => {
       .end(done)
   })
 
-  it('should NOT update member createdAt field', (done) => {
-    const memberid = MEMBERS[1]._id.toHexString()
-    Member.findById(memberid)
-      .then(member => {
-        const name = 'put_members_memberid_name'
-        const email = 'put_members_memberid_email'
-        const createdAt = new Date()
-        const _createdAt = member.toJSON().createdAt
-        request(app)
-          .put(`/members/${memberid}`)
-          .send({name, email, createdAt})
-          .expect(200)
-          .expect(res => {
-            expect(res.body.name).to.equal(name)
-            expect(res.body.email).to.equal(email)
-            expect(Date.parse(res.body.createdAt)).not.to.equal(Date.parse(createdAt))
-          })
-          .end(done)
-      })
-
-  })
+  // it('should NOT update member createdAt field', (done) => {
+  //   const memberid = MEMBERS[1]._id.toHexString()
+  //   Member.findById(memberid)
+  //     .then(member => {
+  //       const name = 'put_members_memberid_name'
+  //       const email = 'put_members_memberid_email'
+  //       const createdAt = new Date()
+  //       const _createdAt = member.toJSON().createdAt
+  //       request(app)
+  //         .put(`/members/${memberid}`)
+  //         .send({name, email, createdAt})
+  //         .expect(200)
+  //         .expect(res => {
+  //           expect(res.body.name).to.equal(name)
+  //           expect(res.body.email).to.equal(email)
+  //           expect(Date.parse(res.body.createdAt)).not.to.equal(Date.parse(createdAt))
+  //         })
+  //         .end(done)
+  //     })
+  //
+  // })
 })
 
